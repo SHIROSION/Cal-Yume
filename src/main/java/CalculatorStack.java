@@ -22,7 +22,7 @@ public class CalculatorStack<E> {
     private ArrayList<E> arrayList;
 
     public CalculatorStack() {
-        this.arrayList = new ArrayList<>();
+        this.arrayList = new ArrayList<E>();
     }
 
     public void add(E o) {

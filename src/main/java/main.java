@@ -23,8 +23,7 @@ public class main {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.next();
         char[] a = input.toCharArray();
-        CalculatorLexicalAnalysis calculatorLexicalAnalysis = new CalculatorLexicalAnalysis();
-        calculatorLexicalAnalysis.set(a);
+        CalculatorControl calculatorControl = new CalculatorControl(a);
         return;
     }
 }

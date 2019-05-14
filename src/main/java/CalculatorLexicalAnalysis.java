@@ -23,20 +23,11 @@ public class CalculatorLexicalAnalysis {
     private ArrayList<String> text;
 
     private boolean pointFind = false;
-    private boolean useMethod = false;
-    private final static String POINT = ".";
+    private boolean symbolFlag = false;
 
     public CalculatorLexicalAnalysis() {
-        this.newFormula = new ArrayList<>();
-        this.text = new ArrayList<>();
-    }
-
-    /**
-     * 该方法主要用于初始化字符串变量和操作小数点的flag变量
-     */
-    private void setNumberNull() {
-        this.text.clear();
-        this.pointFind = false;
+        this.newFormula = new ArrayList<String>();
+        this.text = new ArrayList<String>();
     }
 
     public ArrayList<String> set(char[] code) throws Exception {
@@ -48,7 +39,7 @@ public class CalculatorLexicalAnalysis {
                 addPunctuation(code[i]);
             }
         }
-
+        mergeSymbol();
         System.out.println(this.newFormula);
         return this.newFormula;
     }
@@ -76,7 +67,7 @@ public class CalculatorLexicalAnalysis {
         }
     }
 
-    public void addPunctuation(char code) throws Exception {
+    private void addPunctuation(char code) throws Exception {
 
         if (CalculatorCheck.checkWord(code)) {
 
@@ -111,6 +102,32 @@ public class CalculatorLexicalAnalysis {
                 this.newFormula.add(String.valueOf(code));
             }
         }
+    }
+
+    private void mergeSymbol() {
+        this.text.clear();
+        StringBuilder s = new StringBuilder();
+
+        for (String code : this.newFormula) {
+            if (CalculatorCheck.checkSymbol(code)) {
+                if (!this.symbolFlag || CalculatorCheck.checkParenthesis(code)) {
+                    this.symbolFlag = true;
+                    this.text.add(code);
+                    if (CalculatorCheck.checkRightParenthesis(code)) {
+                        this.symbolFlag = false;
+                    }
+                } else if (this.symbolFlag) {
+                    s.append(code);
+                }
+            } else {
+                this.symbolFlag = false;
+                this.text.add(s.append(code).toString());
+                s.setLength(0);
+            }
+        }
+
+        this.newFormula.clear();
+        this.newFormula = this.text;
     }
 
     private void addNewFormula() {

@@ -21,8 +21,8 @@ import java.util.Arrays;
  */
 public class CalculatorCheck {
 
-    private final static ArrayList<String> METHOD = new ArrayList<>(Arrays.asList("abs", "exp", "log10", "ln", "sin", "cos", "tan"));
-    private final static ArrayList<String> SYMBOL = new ArrayList<>(Arrays.asList("^", "+", "-", "*", "/" ,"%", "=", "(", ")"));
+    private final static ArrayList<String> METHOD = new ArrayList<String>(Arrays.asList("abs", "exp", "log10", "ln", "sin", "cos", "tan"));
+    private final static ArrayList<String> SYMBOL = new ArrayList<String>(Arrays.asList("^", "+", "-", "*", "/" ,"%", "=", "(", ")"));
 
     private final static String LEFT_PARENTHESIS = "(";
     private final static String RIGHT_PARENTHESIS = ")";

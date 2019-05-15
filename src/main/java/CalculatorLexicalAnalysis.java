@@ -39,7 +39,7 @@ public class CalculatorLexicalAnalysis {
                 addPunctuation(code[i]);
             }
         }
-        mergeSymbol();
+        finalSetFormula();
         System.out.println(this.newFormula);
         return this.newFormula;
     }
@@ -104,8 +104,19 @@ public class CalculatorLexicalAnalysis {
         }
     }
 
-    private void mergeSymbol() {
+    private void finalSetFormula() {
+        if (!this.text.isEmpty()) {
+            StringBuilder a = new StringBuilder();
+            for (String s : this.text) {
+                a.append(s);
+            }
+            this.newFormula.add(a.toString());
+        }
         this.text.clear();
+        mergeSymbol();
+    }
+
+    private void mergeSymbol() {
         StringBuilder s = new StringBuilder();
 
         for (String code : this.newFormula) {

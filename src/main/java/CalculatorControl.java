@@ -24,7 +24,6 @@ public class CalculatorControl {
     private ArrayList<String> formula;
     private ArrayList<String> newFormula;
     private boolean method = false;
-    private boolean symbol = false;
 
     public CalculatorControl(char[] inputFormula) throws Exception {
         this.formula = new CalculatorLexicalAnalysis().set(inputFormula);
@@ -65,30 +64,24 @@ public class CalculatorControl {
                 }
                 // 如果遍历到不是"*","/","^"这三个运算优先级高的符号且栈顶元素优先级高于遍历到的元素
                 // 则一直弹栈，直到遇到优先级高的符号或者左括号
-            }  else if (!CalculatorCheck.checkTopSymbol(code)) {
-                // 如果堆栈为空，则压栈
+            } else {
                 if (this.stack.isEmpty()) {
                     this.stack.add(code);
+                } else if (CalculatorCheck.checkBigSymbol(code, this.stack.peek())) {
+                    this.stack.add(code);
                 } else {
-                    // 如果堆栈不为空，且栈顶元素优先级大于遍历的元素
-                    if (CalculatorCheck.checkTopSymbol(this.stack.peek())) {
-                        // 栈顶弹出，直到栈顶栈顶元素优先级不再高于遍历的元素
-                        do {
-                            this.newFormula.add(this.stack.pop());
-                        } while (!CalculatorCheck.checkTopSymbol(this.stack.peek())
-                                && !CalculatorCheck.checkLeftParenthesis(this.stack.peek()));
-                        // 弹完栈顶后再入栈
-                        this.stack.add(code);
-                    } else {
-                        this.stack.add(code);
-                    }
+                    do {
+                        this.newFormula.add(this.stack.pop());
+                        if (this.stack.isEmpty()) {
+                            break;
+                        }
+                    } while (!CalculatorCheck.checkBigSymbol(code, this.stack.peek()));
+
+                    this.stack.add(code);
                 }
-            } else {
-                this.stack.add(code);
             }
         }
 
-        // 遍历完元素后，若栈内还有元素则弹栈
         while (!this.stack.isEmpty()) {
             // 若栈内还有多余的左括号，则证明表达式语法错误
             if (!CalculatorCheck.checkLeftParenthesis(this.stack.peek())) {
@@ -97,6 +90,61 @@ public class CalculatorControl {
                 throw new Exception("语法错误");
             }
         }
+
         System.out.println(this.newFormula);
+    }
+
+    public String getResult() throws Exception {
+
+        while (!this.stack.isEmpty()) {
+            this.stack.pop();
+        }
+
+        for (String code : this.newFormula) {
+            if (!CalculatorCheck.checkSymbol(code)) {
+                this.stack.add(code);
+            } else if (CalculatorCheck.checkSymbol(code)) {
+                if (this.stack.getSize() >= 2) {
+                    this.stack.add(calculator(this.stack.pop(), code, this.stack.pop()));
+                }
+            } else {
+                throw new Exception("语法错误");
+            }
+        }
+        return this.stack.pop();
+    }
+
+    private String calculator(String second, String symbol, String first) throws Exception {
+        Double firstNumber = Double.valueOf(first);
+        Double secondNumber = Double.valueOf(second);
+
+        switch (symbol) {
+            case "+":
+                return String.valueOf(firstNumber + secondNumber);
+            case "-":
+                return String.valueOf(firstNumber - secondNumber);
+            case "*":
+                return String.valueOf(firstNumber * secondNumber);
+            case "/":
+                try {
+                    return String.valueOf(firstNumber / secondNumber);
+                } catch (Exception e) {
+                    throw new Exception("分母不能为0");
+                }
+            case "^":
+                return String.valueOf(Math.pow(firstNumber, secondNumber));
+            case "%":
+                try {
+                    return String.valueOf(firstNumber % secondNumber);
+                } catch (Exception e) {
+                    throw new Exception("分母不能为0");
+                }
+            default:
+                    throw new Exception("语法错误");
+        }
+    }
+
+    public String returnTest() {
+        return this.newFormula.toString();
     }
 }

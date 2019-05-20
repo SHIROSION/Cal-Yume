@@ -30,6 +30,7 @@ public class CalculatorCheck {
     private final static String DIVISION = "/";
     private final static String POWER = "^";
     private final static String POINT = ".";
+    private final static String MODULUS = "%";
     private final static char ZERO = '0';
     private final static char NINE = '9';
 
@@ -70,11 +71,19 @@ public class CalculatorCheck {
     }
 
     public static boolean checkTopSymbol(String code) {
-        return checkMultiply(code) || checkDivision(code) || checkPower(code);
+        return checkMultiply(code) || checkDivision(code) || checkPower(code) || checkModulus(code);
+    }
+
+    public static boolean checkBigSymbol(String code, String peek) {
+        return (checkTopSymbol(code) && !checkTopSymbol(peek)) || checkLeftParenthesis(peek);
     }
 
     public static boolean checkParenthesis(String code) {
         return RIGHT_PARENTHESIS.equals(code) || LEFT_PARENTHESIS.equals(code);
+    }
+
+    public static boolean checkModulus(String code) {
+        return MODULUS.equals(code);
     }
 
     public static boolean checkWord(char code) {

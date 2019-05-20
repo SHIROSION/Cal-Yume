@@ -62,6 +62,7 @@ public class CalculatorLexicalAnalysis {
                 number.append(c);
             }
             this.newFormula.add(number.append(code).toString());
+            this.text.clear();
         } else {
             this.text.add(String.valueOf(code));
         }
@@ -104,7 +105,7 @@ public class CalculatorLexicalAnalysis {
         }
     }
 
-    private void finalSetFormula() {
+    private void finalSetFormula() throws Exception {
         if (!this.text.isEmpty()) {
             StringBuilder a = new StringBuilder();
             for (String s : this.text) {
@@ -116,7 +117,7 @@ public class CalculatorLexicalAnalysis {
         mergeSymbol();
     }
 
-    private void mergeSymbol() {
+    private void mergeSymbol() throws Exception {
         StringBuilder s = new StringBuilder();
 
         for (String code : this.newFormula) {
@@ -131,9 +132,19 @@ public class CalculatorLexicalAnalysis {
                     s.append(code);
                 }
             } else {
-                this.symbolFlag = false;
-                this.text.add(s.append(code).toString());
-                s.setLength(0);
+                if (CalculatorCheck.checkWord(code.toCharArray()[0])) {
+                    if (CalculatorCheck.checkMethod(code)) {
+                        this.symbolFlag = false;
+                        this.text.add(s.append(code).toString());
+                        s.setLength(0);
+                    } else {
+                        throw new Exception("语法错误");
+                    }
+                } else {
+                    this.symbolFlag = false;
+                    this.text.add(s.append(code).toString());
+                    s.setLength(0);
+                }
             }
         }
 

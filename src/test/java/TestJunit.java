@@ -70,16 +70,168 @@ public class TestJunit {
     }
 
     @Test
-    public void testOneWord() throws Exception {
-        String a = "[1, +, a]";
+    public void testOneWord() {
+        boolean flag = false;
         char[] b = "1+a".toCharArray();
+        try {
+            new CalculatorLexicalAnalysis().set(b);
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testTwoWord() {
+        boolean flag = false;
+        char[] b = "1+as".toCharArray();
+        try {
+            new CalculatorLexicalAnalysis().set(b);
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testNumberAndWord() {
+        boolean flag = false;
+        char[] b = "1+345as".toCharArray();
+        try {
+            new CalculatorLexicalAnalysis().set(b);
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testNumberAndWord1() {
+        boolean flag = false;
+        char[] b = "1+345s123".toCharArray();
+        try {
+            new CalculatorLexicalAnalysis().set(b);
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testMethod() throws Exception {
+        String a = "[abs]";
+        char[] b = "abs".toCharArray();
         assertEquals(a, new CalculatorLexicalAnalysis().set(b).toString());
     }
 
     @Test
-    public void testTwoWord() throws Exception {
-        String a = "[1, +, as]";
-        char[] b = "1+as".toCharArray();
-        assertEquals(a, new CalculatorLexicalAnalysis().set(b).toString());
+    public void testPN() throws Exception {
+        String a = "[6, 5, 2, 3, +, 8, *, +, 3, +, *]";
+        char[] b = "6*(5+(2+3)*8+3)".toCharArray();
+        assertEquals(a, new CalculatorControl(b).returnTest());
+    }
+
+    @Test
+    public void testPN2() throws Exception {
+        String a = "[4, 5, +, 6, *, 5, -, 2, /, 3, 2, *, +]";
+        char[] b = "((4+5)*6-5)/2+3*2".toCharArray();
+        assertEquals(a, new CalculatorControl(b).returnTest());
+    }
+
+    @Test
+    public void testPN3() throws Exception {
+        String a = "[5, 1, 2, +, 4, *, +, 3, -]";
+        char[] b = "5+((1+2)*4)-3".toCharArray();
+        assertEquals(a, new CalculatorControl(b).returnTest());
+    }
+
+    @Test
+    public void testPN4() throws Exception {
+        String a = "[10, 6, 9, 3, +, 11, *, /, *, 17, +, 5, +]";
+        char[] b = "((10*(6/((9+3)*11)))+17)+5".toCharArray();
+        assertEquals(a, new CalculatorControl(b).returnTest());
+    }
+
+    @Test
+    public void testPN5() throws Exception {
+        String a = "[9, 3, 4, 2, -, *, 3, *, +, 10, 2, /, +]";
+        char[] b = "9+(3*(4-2))*3+10/2".toCharArray();
+        assertEquals(a, new CalculatorControl(b).returnTest());
+    }
+
+    @Test
+    public void testPN6() throws Exception {
+        String a = "[1, 2, 5, -, 6, 9, *, +, 6, -, 7, 2, /, 3, *, 6, 9, 345, *, +, 76, -, *, +, 2, /, 3, *, +, 23, -]";
+        char[] b = "1+(2-5+6*9-6+7/2*3*(6+9*345-76))/2*3-23".toCharArray();
+        assertEquals(a, new CalculatorControl(b).returnTest());
+    }
+
+    @Test
+    public void testPNParenthesis() {
+        boolean flag = false;
+        char[] b = "1+abs(1+2+4))".toCharArray();
+        try {
+            new CalculatorControl(b).returnTest();
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testPNParenthesis1() {
+        boolean flag = false;
+        char[] b = "1+abs((1+2+4)".toCharArray();
+        try {
+            new CalculatorControl(b).returnTest();
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testPNParenthesisVoid() {
+        boolean flag = false;
+        char[] b = "1+abs()".toCharArray();
+        try {
+            new CalculatorControl(b).returnTest();
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testPNParenthesis2() {
+        boolean flag = false;
+        char[] b = "1+a(1+3*6)".toCharArray();
+        try {
+            new CalculatorControl(b).returnTest();
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testResult() throws Exception {
+        String a = "6.2";
+        char[] b = "1+2*3-4/5".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult1() throws Exception {
+        String a = "47846.3";
+        char[] b = "1+(2-5+6*9-6.3+7/2*3*(6+9*345-76))/2*3-23".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult2() throws Exception {
+        String a = "32.0";
+        char[] b = "9+(3*(4-2))*3+10/2".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
     }
 }

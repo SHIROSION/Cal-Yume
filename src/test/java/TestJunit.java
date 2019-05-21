@@ -63,10 +63,41 @@ public class TestJunit {
     }
 
     @Test
+    public void testDoubleSymbol1() throws Exception {
+        String a = "[1, +, abs, (, -+--+1.567, +, -+--+++2.890, *, 4, /, 5, )]";
+        char[] b = "1+abs(-+--+1.567+-+--+++2.890*4/5)".toCharArray();
+        assertEquals(a, new CalculatorLexicalAnalysis().set(b).toString());
+    }
+
+    @Test
+    public void testDoubleSymbol2() throws Exception {
+        boolean flag = false;
+        char[] b = "1+abs(-+--+1.567+-+-*-+++2.890*4/5)".toCharArray();
+        try {
+            new CalculatorLexicalAnalysis().set(b);
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
     public void testMethodNumber() throws Exception {
         String a = "[1, +, 10, *, abs, (, -1.567, +, 2.890, *, 4, /, 5, )]";
         char[] b = "1+10abs(-1.567+2.890*4/5)".toCharArray();
         assertEquals(a, new CalculatorLexicalAnalysis().set(b).toString());
+    }
+
+    @Test
+    public void testFirstZero() throws Exception {
+        boolean flag = false;
+        char[] b = "012+5".toCharArray();
+        try {
+            new CalculatorLexicalAnalysis().set(b);
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
     }
 
     @Test
@@ -232,6 +263,32 @@ public class TestJunit {
     public void testResult2() throws Exception {
         String a = "32.0";
         char[] b = "9+(3*(4-2))*3+10/2".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult3() {
+        boolean flag = false;
+        char[] b = "1+7/0".toCharArray();
+        try {
+            new CalculatorControl(b).getResult();
+        } catch (Exception e) {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void testResult4() throws Exception {
+        String a = "3.0";
+        char[] b = "12/4".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult5() throws Exception {
+        String a = "0.0";
+        char[] b = "12%4".toCharArray();
         assertEquals(a, new CalculatorControl(b).getResult());
     }
 }

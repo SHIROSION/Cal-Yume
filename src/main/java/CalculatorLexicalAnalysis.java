@@ -24,6 +24,7 @@ public class CalculatorLexicalAnalysis {
 
     private boolean pointFind = false;
     private boolean symbolFlag = false;
+    private char ZERO = '0';
 
     public CalculatorLexicalAnalysis() {
         this.newFormula = new ArrayList<String>();
@@ -46,6 +47,9 @@ public class CalculatorLexicalAnalysis {
 
     private void addNumber(char code, int codeLength, int i) throws Exception {
 
+        if (this.text.isEmpty() && code == this.ZERO) {
+            throw new Exception("语法错误");
+        }
         // 判断传入字符是否为数字
         if (CalculatorCheck.checkPoint(String.valueOf(code))) {
             if (this.text.isEmpty()) {
@@ -128,11 +132,13 @@ public class CalculatorLexicalAnalysis {
                     if (CalculatorCheck.checkRightParenthesis(code)) {
                         this.symbolFlag = false;
                     }
-                } else if (this.symbolFlag) {
+                } else if (this.symbolFlag && CalculatorCheck.checkLowSymbol(code.charAt(0))) {
                     s.append(code);
+                } else {
+                    throw new Exception("语法错误");
                 }
             } else {
-                if (CalculatorCheck.checkWord(code.toCharArray()[0])) {
+                if (CalculatorCheck.checkWord(code.charAt(0))) {
                     if (CalculatorCheck.checkMethod(code)) {
                         this.symbolFlag = false;
                         this.text.add(s.append(code).toString());

@@ -66,6 +66,22 @@ public class CalculatorCheck {
         return POINT.equals(code);
     }
 
+    public static boolean checkModulus(String code) {
+        return MODULUS.equals(code);
+    }
+
+    public static boolean checkWord(char code) {
+        return code >= 97 && code <= 122;
+    }
+
+    public static boolean checkLowSymbol(char code) {
+        return code == '-' || code == '+';
+    }
+
+    public static boolean checkNumber(char code) {
+        return code >= ZERO && code <= NINE;
+    }
+
     public static boolean checkDoubleSymbol(String code) {
         return SYMBOL.contains(code) && !checkLeftParenthesis(code) && !checkRightParenthesis(code);
     }
@@ -82,23 +98,7 @@ public class CalculatorCheck {
         return RIGHT_PARENTHESIS.equals(code) || LEFT_PARENTHESIS.equals(code);
     }
 
-    public static boolean checkModulus(String code) {
-        return MODULUS.equals(code);
-    }
-
-    public static boolean checkWord(char code) {
-        return code >= 97 && code <= 122;
-    }
-
-    public static boolean checkLowSymbol(char code) {
-        return code == '-' || code == '+';
-    }
-
     public static boolean checkNumberAndPoint(char code) {
         return code >= ZERO && code <= NINE || POINT.equals(String.valueOf(code));
-    }
-
-    public static boolean checkNumber(char code) {
-        return code >= ZERO && code <= NINE;
     }
 }

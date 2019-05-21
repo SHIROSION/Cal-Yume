@@ -24,6 +24,8 @@ public class CalculatorControl {
     private ArrayList<String> formula;
     private ArrayList<String> newFormula;
     private boolean method = false;
+    private char MINUS = '-';
+    private char ZERO = '0';
 
     public CalculatorControl(char[] inputFormula) throws Exception {
         this.formula = new CalculatorLexicalAnalysis().set(inputFormula);
@@ -114,6 +116,42 @@ public class CalculatorControl {
         return this.stack.pop();
     }
 
+//    private void checkNumberSymbol(String second, String symbol, String first) {
+//
+//        int minusTimes = 0;
+//        boolean firstMinus = false;
+//        boolean secondMinus = false;
+//
+//        StringBuffer newSecondNumber = new StringBuffer();
+//        StringBuffer newFirstNumber = new StringBuffer();
+//
+//        char[] secondNumber = second.toCharArray();
+//        char[] firstNumber = first.toCharArray();
+//
+//        if (CalculatorCheck.checkNumber(secondNumber[0])) {
+//            newSecondNumber = new StringBuffer(second);
+//        } else {
+//            for (char a : second.toCharArray()) {
+//                if (CalculatorCheck.checkLowSymbol(a)) {
+//                    if (a == this.MINUS) {
+//                        minusTimes ++;
+//                    }
+//                } else if (a == this.ZERO){
+//                    newSecondNumber.append(a);
+//                    break;
+//                } else {
+//                    newSecondNumber.append(a)
+//                }
+//            }
+//
+//            if ()
+//        }
+//
+//        if (CalculatorCheck.checkNumber(firstNumber[0])) {
+//            newFirstNumber = new StringBuffer(second);
+//        }
+//    }
+
     private String calculator(String second, String symbol, String first) throws Exception {
         Double firstNumber = Double.valueOf(first);
         Double secondNumber = Double.valueOf(second);
@@ -126,18 +164,18 @@ public class CalculatorControl {
             case "*":
                 return String.valueOf(firstNumber * secondNumber);
             case "/":
-                try {
-                    return String.valueOf(firstNumber / secondNumber);
-                } catch (Exception e) {
+                if (secondNumber == 0) {
                     throw new Exception("分母不能为0");
+                } else {
+                    return String.valueOf(firstNumber / secondNumber);
                 }
             case "^":
                 return String.valueOf(Math.pow(firstNumber, secondNumber));
             case "%":
-                try {
-                    return String.valueOf(firstNumber % secondNumber);
-                } catch (Exception e) {
+                if (secondNumber == 0) {
                     throw new Exception("分母不能为0");
+                } else {
+                    return String.valueOf(firstNumber % secondNumber);
                 }
             default:
                     throw new Exception("语法错误");

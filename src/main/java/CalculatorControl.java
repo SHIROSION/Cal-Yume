@@ -29,8 +29,8 @@ public class CalculatorControl {
 
     public CalculatorControl(char[] inputFormula) throws Exception {
         this.formula = new CalculatorLexicalAnalysis().set(inputFormula);
-        this.newFormula = new ArrayList<String>();
-        this.stack = new CalculatorStack<String>();
+        this.newFormula = new ArrayList<>();
+        this.stack = new CalculatorStack<>();
         reversePolishNotation();
     }
 
@@ -97,6 +97,8 @@ public class CalculatorControl {
     }
 
     public String getResult() throws Exception {
+        String second = "";
+        String first = "";
 
         while (!this.stack.isEmpty()) {
             this.stack.pop();
@@ -107,54 +109,97 @@ public class CalculatorControl {
                 this.stack.add(code);
             } else if (CalculatorCheck.checkSymbol(code)) {
                 if (this.stack.getSize() >= 2) {
-                    this.stack.add(calculator(this.stack.pop(), code, this.stack.pop()));
+                    second = this.stack.pop();
+                    first = this.stack.pop();
+                    if (CalculatorCheck.checkMethod(first)) {
+                        this.stack.add(calculator(mergeNumberSymbol(this.stack.pop()), mergeNumberSymbol(getMethod(first, second)), code));
+                    } else {
+                        this.stack.add(calculator(mergeNumberSymbol(second), mergeNumberSymbol(first), code));
+                    }
                 }
             } else {
                 throw new Exception("语法错误");
             }
         }
+
+        if (this.stack.getSize() == 2) {
+            String number = this.stack.pop();
+            String method = this.stack.pop();
+            this.stack.add(getMethod(method, number));
+        }
+
         return this.stack.pop();
     }
 
-//    private void checkNumberSymbol(String second, String symbol, String first) {
-//
-//        int minusTimes = 0;
-//        boolean firstMinus = false;
-//        boolean secondMinus = false;
-//
-//        StringBuffer newSecondNumber = new StringBuffer();
-//        StringBuffer newFirstNumber = new StringBuffer();
-//
-//        char[] secondNumber = second.toCharArray();
-//        char[] firstNumber = first.toCharArray();
-//
-//        if (CalculatorCheck.checkNumber(secondNumber[0])) {
-//            newSecondNumber = new StringBuffer(second);
-//        } else {
-//            for (char a : second.toCharArray()) {
-//                if (CalculatorCheck.checkLowSymbol(a)) {
-//                    if (a == this.MINUS) {
-//                        minusTimes ++;
-//                    }
-//                } else if (a == this.ZERO){
-//                    newSecondNumber.append(a);
-//                    break;
-//                } else {
-//                    newSecondNumber.append(a)
-//                }
-//            }
-//
-//            if ()
-//        }
-//
-//        if (CalculatorCheck.checkNumber(firstNumber[0])) {
-//            newFirstNumber = new StringBuffer(second);
-//        }
-//    }
+    private String mergeNumberSymbol(String number) {
+        int times = 0;
+        int minusTimes = 0;
+        char minus = '-';
+        int two = 2;
 
-    private String calculator(String second, String symbol, String first) throws Exception {
-        Double firstNumber = Double.valueOf(first);
-        Double secondNumber = Double.valueOf(second);
+        for (char a : number.toCharArray()) {
+            if (CalculatorCheck.checkLowSymbol(a)) {
+                times ++;
+                if (a == minus) {
+                    minusTimes ++;
+                }
+            } else {
+                break;
+            }
+        }
+
+        if (minusTimes % two == 0) {
+            return number;
+        } else {
+            return "-" + number.substring(times);
+        }
+    }
+
+    private String getMethod(String method, String number) throws Exception {
+        double newNumber = Double.parseDouble(number);
+
+        switch (method) {
+            case "abs":
+                return String.valueOf(Math.abs(newNumber));
+            case "exp":
+                return String.valueOf(Math.exp(newNumber));
+            case "log10":
+                if (newNumber >= 0) {
+                    return String.valueOf(Math.log10(newNumber));
+                } else {
+                    throw new Exception("语法错误");
+                }
+            case "log":
+                if (newNumber >= 0) {
+                    return String.valueOf(Math.log(newNumber));
+                } else {
+                    throw new Exception("语法错误");
+                }
+            case "ln":
+                if (newNumber >= 0) {
+                    return String.valueOf(Math.log1p(newNumber));
+                } else {
+                    throw new Exception("语法错误");
+                }
+            case "sin":
+                return String.valueOf(Math.sin(newNumber));
+            case "cos":
+                return String.valueOf(Math.cos(newNumber));
+            case "tan":
+                try {
+                    double a = Math.tan(newNumber);
+                    return String.valueOf(a);
+                } catch (Exception e) {
+                    throw new Exception("语法错误");
+                }
+            default:
+                throw new Exception("语法错误");
+        }
+    }
+
+    private String calculator(String second, String first, String symbol) throws Exception {
+        double firstNumber = Double.valueOf(first);
+        double secondNumber = Double.valueOf(second);
 
         switch (symbol) {
             case "+":

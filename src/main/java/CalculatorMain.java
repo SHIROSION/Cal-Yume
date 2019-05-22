@@ -20,10 +20,10 @@ import java.util.Scanner;
  */
 public class CalculatorMain {
     public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.next();
-        char[] a = input.toCharArray();
-        CalculatorControl calculatorControl = new CalculatorControl(a);
+//        Scanner scanner = new Scanner(System.in);
+//        String input = scanner.next();
+//        char[] a = input.toCharArray();
+        CalculatorControl calculatorControl = new CalculatorControl("1+exp(-2)".toCharArray());
         System.out.println(calculatorControl.getResult());
         return;
     }

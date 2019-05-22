@@ -21,7 +21,7 @@ import java.util.Arrays;
  */
 public class CalculatorCheck {
 
-    private final static ArrayList<String> METHOD = new ArrayList<String>(Arrays.asList("abs", "exp", "log10", "ln", "sin", "cos", "tan"));
+    private final static ArrayList<String> METHOD = new ArrayList<String>(Arrays.asList("abs", "exp", "log10", "log", "ln", "sin", "cos", "tan"));
     private final static ArrayList<String> SYMBOL = new ArrayList<String>(Arrays.asList("^", "+", "-", "*", "/" ,"%", "=", "(", ")"));
 
     private final static String LEFT_PARENTHESIS = "(";
@@ -80,10 +80,6 @@ public class CalculatorCheck {
 
     public static boolean checkNumber(char code) {
         return code >= ZERO && code <= NINE;
-    }
-
-    public static boolean checkDoubleSymbol(String code) {
-        return SYMBOL.contains(code) && !checkLeftParenthesis(code) && !checkRightParenthesis(code);
     }
 
     public static boolean checkTopSymbol(String code) {

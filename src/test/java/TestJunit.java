@@ -291,4 +291,60 @@ public class TestJunit {
         char[] b = "12%4".toCharArray();
         assertEquals(a, new CalculatorControl(b).getResult());
     }
+
+    @Test
+    public void testResult6() throws Exception {
+        String a = "-11.0";
+        char[] b = "12+-+--+23".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult7() throws Exception {
+        String a = "-276.0";
+        char[] b = "12*+-+--+23".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult8() throws Exception {
+        String a = "2.0";
+        char[] b = "1+abs(-1)".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult9() throws Exception {
+        String a = "1.0";
+        char[] b = "abs(-1)".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult10() throws Exception {
+        String a = "10.0";
+        char[] b = "10abs(-1)".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult11() throws Exception {
+        String a = "1.5403023058681398";
+        char[] b = "1+cos(-1)".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult12() throws Exception {
+        String a = "1.3678794411714423";
+        char[] b = "1+exp(-1)".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
+
+    @Test
+    public void testResult13() throws Exception {
+        String a = "0.1585290151921035";
+        char[] b = "1+sin(-1)".toCharArray();
+        assertEquals(a, new CalculatorControl(b).getResult());
+    }
 }

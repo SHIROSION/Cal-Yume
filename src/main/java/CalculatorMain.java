@@ -23,7 +23,7 @@ public class CalculatorMain {
 //        Scanner scanner = new Scanner(System.in);
 //        String input = scanner.next();
 //        char[] a = input.toCharArray();
-        CalculatorControl calculatorControl = new CalculatorControl("1+exp(-2)".toCharArray());
+        CalculatorControl calculatorControl = new CalculatorControl("12*-+-+23".toCharArray());
         System.out.println(calculatorControl.getResult());
         return;
     }

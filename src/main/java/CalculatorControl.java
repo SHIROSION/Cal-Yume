@@ -24,8 +24,6 @@ public class CalculatorControl {
     private ArrayList<String> formula;
     private ArrayList<String> newFormula;
     private boolean method = false;
-    private char MINUS = '-';
-    private char ZERO = '0';
 
     public CalculatorControl(char[] inputFormula) throws Exception {
         this.formula = new CalculatorLexicalAnalysis().set(inputFormula);
@@ -97,8 +95,8 @@ public class CalculatorControl {
     }
 
     public String getResult() throws Exception {
-        String second = "";
-        String first = "";
+        String second;
+        String first;
 
         while (!this.stack.isEmpty()) {
             this.stack.pop();
@@ -112,9 +110,9 @@ public class CalculatorControl {
                     second = this.stack.pop();
                     first = this.stack.pop();
                     if (CalculatorCheck.checkMethod(first)) {
-                        this.stack.add(calculator(mergeNumberSymbol(this.stack.pop()), mergeNumberSymbol(getMethod(first, second)), code));
+                        this.stack.add(calculator(this.stack.pop(), getMethod(first, second), code));
                     } else {
-                        this.stack.add(calculator(mergeNumberSymbol(second), mergeNumberSymbol(first), code));
+                        this.stack.add(calculator(second, first, code));
                     }
                 }
             } else {
@@ -129,30 +127,6 @@ public class CalculatorControl {
         }
 
         return this.stack.pop();
-    }
-
-    private String mergeNumberSymbol(String number) {
-        int times = 0;
-        int minusTimes = 0;
-        char minus = '-';
-        int two = 2;
-
-        for (char a : number.toCharArray()) {
-            if (CalculatorCheck.checkLowSymbol(a)) {
-                times ++;
-                if (a == minus) {
-                    minusTimes ++;
-                }
-            } else {
-                break;
-            }
-        }
-
-        if (minusTimes % two == 0) {
-            return number;
-        } else {
-            return "-" + number.substring(times);
-        }
     }
 
     private String getMethod(String method, String number) throws Exception {

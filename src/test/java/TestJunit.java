@@ -57,14 +57,14 @@ public class TestJunit {
 
     @Test
     public void testDoubleSymbol() throws Exception {
-        String a = "[1, +, abs, (, -+--+1.567, +, 2.890, *, 4, /, 5, )]";
+        String a = "[1, +, abs, (, -1.567, +, 2.890, *, 4, /, 5, )]";
         char[] b = "1+abs(-+--+1.567+2.890*4/5)".toCharArray();
         assertEquals(a, new CalculatorLexicalAnalysis().set(b).toString());
     }
 
     @Test
     public void testDoubleSymbol1() throws Exception {
-        String a = "[1, +, abs, (, -+--+1.567, +, -+--+++2.890, *, 4, /, 5, )]";
+        String a = "[1, +, abs, (, -+--+1.567, +, -2.890, *, 4, /, 5, )]";
         char[] b = "1+abs(-+--+1.567+-+--+++2.890*4/5)".toCharArray();
         assertEquals(a, new CalculatorLexicalAnalysis().set(b).toString());
     }

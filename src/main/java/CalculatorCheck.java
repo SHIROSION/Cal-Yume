@@ -82,6 +82,10 @@ public class CalculatorCheck {
         return code >= ZERO && code <= NINE;
     }
 
+    public static boolean isLog(String code) {
+        return "log".equals(code);
+    }
+
     public static boolean checkTopSymbol(String code) {
         return checkMultiply(code) || checkDivision(code) || checkPower(code) || checkModulus(code);
     }

@@ -27,8 +27,8 @@ public class CalculatorLexicalAnalysis {
     private char ZERO = '0';
 
     public CalculatorLexicalAnalysis() {
-        this.newFormula = new ArrayList<String>();
-        this.text = new ArrayList<String>();
+        this.newFormula = new ArrayList<>();
+        this.text = new ArrayList<>();
     }
 
     public ArrayList<String> set(char[] code) throws Exception {
@@ -78,9 +78,9 @@ public class CalculatorLexicalAnalysis {
 
             if (CalculatorCheck.checkWord(code)) {
                 if (!this.text.isEmpty()) {
-                    if (CalculatorCheck.checkWord(this.text.get(this.text.size() - 1).toCharArray()[0])) {
+                    if (CalculatorCheck.checkWord(this.text.get(this.text.size() - 1).charAt(0))) {
                         this.text.add(String.valueOf(code));
-                    } else if (CalculatorCheck.checkNumber(this.text.get(this.text.size() - 1).toCharArray()[0])) {
+                    } else if (CalculatorCheck.checkNumber(this.text.get(this.text.size() - 1).charAt(0))) {
                         this.addNewFormula();
                         this.newFormula.add("*");
                         this.text.clear();
@@ -122,7 +122,9 @@ public class CalculatorLexicalAnalysis {
     }
 
     private void mergeSymbol() throws Exception {
-        StringBuilder s = new StringBuilder();
+        int minusTimes = 0;
+        int two = 2;
+        String minus = "-";
 
         for (String code : this.newFormula) {
             if (CalculatorCheck.checkSymbol(code)) {
@@ -133,7 +135,9 @@ public class CalculatorLexicalAnalysis {
                         this.symbolFlag = false;
                     }
                 } else if (this.symbolFlag && CalculatorCheck.checkLowSymbol(code.charAt(0))) {
-                    s.append(code);
+                    if (code.equals(minus)) {
+                        minusTimes ++;
+                    }
                 } else {
                     throw new Exception("语法错误");
                 }
@@ -141,15 +145,25 @@ public class CalculatorLexicalAnalysis {
                 if (CalculatorCheck.checkWord(code.charAt(0))) {
                     if (CalculatorCheck.checkMethod(code)) {
                         this.symbolFlag = false;
-                        this.text.add(s.append(code).toString());
-                        s.setLength(0);
+                        if (minusTimes % two == 0) {
+                            minusTimes = 0;
+                            this.text.add(code);
+                        } else {
+                            minusTimes = 0;
+                            this.text.add("-" + code);
+                        }
                     } else {
                         throw new Exception("语法错误");
                     }
                 } else {
                     this.symbolFlag = false;
-                    this.text.add(s.append(code).toString());
-                    s.setLength(0);
+                    if (minusTimes % two == 0) {
+                        minusTimes = 0;
+                        this.text.add(code);
+                    } else {
+                        minusTimes = 0;
+                        this.text.add("-" + code);
+                    }
                 }
             }
         }
